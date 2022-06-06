@@ -16,7 +16,6 @@
 <script>
 export default {
   name: "Navbar",
-  dasdasdasdasdas,
 };
 </script>
 
