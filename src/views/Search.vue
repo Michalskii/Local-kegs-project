@@ -2,27 +2,58 @@
   <v-container class="">
     <div class="header">
       <h2 class="text-center">
-        Search for a specific brewery by it's name or location
+        Search for a specific brewery by it's name, location or type
       </h2>
       <v-text-field
         append-icon="mdi-magnify"
         label="Search"
+        v-model="search"
         class="searchBar"
         single-line
         outlined
         dark
         hide-details
       />
+
+      <v-data-table
+        :headers="headers"
+        :items="brews"
+        :search="search"
+        dark
+        :items-per-page="5"
+        class="my-data-table"
+      ></v-data-table>
     </div>
-    <v-data-table dark class="my-data-table"></v-data-table>
   </v-container>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "Search",
+  data() {
+    return {
+      search: "",
+      headers: [
+        {
+          text: "Name",
+          align: "start",
+          value: "name",
+        },
+        { text: "City", value: "city" },
+
+        { text: "Street", value: "street" },
+        { text: "Type", value: "brewery_type" },
+        { text: "Website", value: "website_url" },
+      ],
+    };
+  },
 
   components: {},
+  computed: {
+    ...mapState("brewsStore", ["brews"]),
+  },
 };
 </script>
 
@@ -33,8 +64,8 @@ export default {
   border-radius: 20px;
   padding: 20px;
   margin-top: 5%;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 h2 {
   color: $primary-color;
@@ -44,12 +75,12 @@ h2 {
 .searchBar.v-text-field {
   max-width: 280px;
   margin: auto;
-  margin-top: 3%;
+  margin-top: 2rem;
 }
 .my-data-table.v-data-table {
   margin-left: 3rem;
   margin-right: 3rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   border-radius: 30px;
 
   background: rgba(1, 1, 1, 0.75);

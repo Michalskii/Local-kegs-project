@@ -1,17 +1,28 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+import brewsStore from '../store/brewsStore';
 
-export default new Vuex.Store({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+Vue.use(Vuex);
+
+export const store = new Vuex.Store({
+	modules: {
+		brewsStore,
+	},
+
+	state: () => ({}),
+	actions: {},
+	mutations: {
+		initialiseStore(state) {
+			if (localStorage.getItem('store')) {
+				this.replaceState(
+					Object.assign(state, JSON.parse(localStorage.getItem('store')))
+				);
+			}
+		},
+	},
+});
+
+store.subscribe((mutation, state) => {
+	localStorage.setItem('store', JSON.stringify(state));
+});
