@@ -15,7 +15,7 @@ export default {
 
 	mutations: {
 		updateBrews(state, data) {
-			state.brews = data;
+			state.brews = data.filter((brew) => brew.latitude !== '');
 		},
 	},
 };

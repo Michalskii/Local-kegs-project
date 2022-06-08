@@ -55,9 +55,7 @@ export default {
         },
         { text: "City", value: "city" },
 
-        { text: "Street", value: "street" },
         { text: "Type", value: "brewery_type" },
-        { text: "Website", value: "website_url" },
       ],
     };
   },
