@@ -83,7 +83,7 @@ export default {
       this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
       this.center = this.newCenter;
       this.newCenter = [];
-      this.zoom = 13;
+      this.zoom = 14;
     },
   },
   computed: {
