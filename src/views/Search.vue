@@ -20,21 +20,33 @@
         :items="brews"
         :search="search"
         dark
+        @click:row="showInfo"
         :items-per-page="5"
         class="my-data-table"
       ></v-data-table>
     </div>
+
+    <info-dialog
+      v-if="dialog"
+      @close="closeDialog"
+      :active="dialog"
+      :brewery="item"
+      title="Genre details"
+    />
   </v-container>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
+import InfoDialog from "../components/InfoDialog.vue";
 export default {
   name: "Search",
+  components: { InfoDialog },
   data() {
     return {
       search: "",
+      dialog: false,
       headers: [
         {
           text: "Name",
@@ -50,9 +62,19 @@ export default {
     };
   },
 
-  components: {},
   computed: {
     ...mapState("brewsStore", ["brews"]),
+  },
+  methods: {
+    showInfo(item) {
+      this.dialog = true;
+      this.item = item;
+      console.log(item);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+    },
   },
 };
 </script>
