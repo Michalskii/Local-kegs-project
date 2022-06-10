@@ -5,6 +5,19 @@ import { store } from './store';
 import vuetify from './plugins/vuetify';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
+import { domain, clientId } from '../auth_config.json';
+import { Auth0Plugin } from './auth';
+Vue.use(Auth0Plugin, {
+	domain,
+	clientId,
+	onRedirectCallback: (appState) => {
+		router.push(
+			appState && appState.targetUrl
+				? appState.targetUrl
+				: window.location.pathname
+		);
+	},
+});
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
