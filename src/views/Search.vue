@@ -23,7 +23,11 @@
         @click:row="showInfo"
         :items-per-page="5"
         class="my-data-table"
-      ></v-data-table>
+      >
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon small @click.stop="test(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </div>
 
     <info-dialog
@@ -47,6 +51,7 @@ export default {
     return {
       search: "",
       dialog: false,
+
       headers: [
         {
           text: "Name",
@@ -56,6 +61,7 @@ export default {
         { text: "City", value: "city" },
 
         { text: "Type", value: "brewery_type" },
+        { text: "Add to favs", value: "actions" },
       ],
     };
   },
@@ -68,6 +74,15 @@ export default {
       this.dialog = true;
       this.item = item;
       console.log(item);
+    },
+    test(item) {
+      // this.jajka = this.$auth.user.favs;
+      // this.jajka.push(item);
+      // console.log(item);
+      // this.$auth.user.favs = [];
+      // this.$auth.user.favs.unshift(item);
+
+      console.log(this.$auth.user);
     },
 
     closeDialog() {

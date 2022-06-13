@@ -8,6 +8,22 @@
       title="Genre details"
     />
 
+    <div class="button-block test">
+      <button
+        v-if="!$auth.isAuthenticated"
+        @click="login"
+        class="button is-xl is-dark"
+      >
+        Sign Up to Browse Events
+      </button>
+      <h3
+        v-if="$auth.isAuthenticated"
+        class="is-size-3 has-background-dark welcome"
+      >
+        Welcome, {{ $auth.user.name }}!
+      </h3>
+    </div>
+
     <l-map class="mapka" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <v-marker-cluster>
@@ -120,6 +136,9 @@ export default {
   margin-top: 5%;
   width: 80%;
   height: 60%;
+}
+.test {
+  color: white;
 }
 .mapka {
   z-index: 2;
