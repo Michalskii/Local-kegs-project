@@ -12,8 +12,9 @@
       <!-- <v-spacer></v-spacer> -->
       <v-col class="text-right">
         <router-link to="/map" class="links">Map</router-link>
-        <router-link to="/search" class="links">Search</router-link></v-col
-      ></v-row
+        <router-link to="/search" class="links">Search</router-link>
+        <router-link to="/profile">Profile</router-link>
+      </v-col></v-row
     >
 
     <div v-if="!$auth.loading" class="pt-10">

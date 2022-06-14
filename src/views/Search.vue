@@ -4,6 +4,7 @@
       <h2 class="text-center">
         Search for a specific brewery by it's name, location or type
       </h2>
+      <v-btn @click="test"></v-btn>
       <v-text-field
         append-icon="mdi-magnify"
         label="Search"
@@ -83,7 +84,7 @@ export default {
       // const found = this.favs.find((element) => element == item);
       // console.log(this.favs);
       // console.log(found.obdb_id);
-      console.log(this.$auth.user.app_metadata);
+      console.log(this.$auth.user.name);
 
       // if (found.obdb_id == item.obdb_id) {
       //   console.log("already there");

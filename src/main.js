@@ -5,10 +5,12 @@ import { store } from './store';
 import vuetify from './plugins/vuetify';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
-import { domain, clientId } from '../auth_config.json';
+import { domain, clientId, audience } from '../auth_config.json';
 import { Auth0Plugin } from './auth';
+
 Vue.use(Auth0Plugin, {
 	domain,
+	audience,
 	clientId,
 	onRedirectCallback: (appState) => {
 		router.push(
