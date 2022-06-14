@@ -2,7 +2,6 @@
 node_modules
 /dist
 
-auth_config.json
 # local env files
 .env.local
 .env.*.local
