@@ -7,6 +7,8 @@
       :brewery="item"
       title="Genre details"
     />
+
+    <v-btn @click="test"></v-btn>
     <l-map
       class="mapka"
       :zoom="zoom"
@@ -52,7 +54,7 @@ export default {
 
   data: function () {
     return {
-      zoom: 4,
+      zoom: 11,
       dialog: false,
       center: [20, -80],
       newCenter: [],
@@ -71,6 +73,9 @@ export default {
     latLng(lat, lng) {
       return L.latLng(lat, lng);
     },
+    test() {
+      console.log(this.zoom);
+    },
     showBrewery(item) {
       let ltd = item.latitude;
       let lng = item.longitude;
@@ -78,8 +83,6 @@ export default {
       this.center = this.newCenter;
       this.newCenter = [];
       this.showInfo(item);
-
-      console.log(jajko);
     },
     getCurrentLocation() {
       navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
@@ -89,7 +92,7 @@ export default {
       let lat = pos.coords.latitude;
       let lng = pos.coords.longitude;
       this.center = [lat, lng];
-      this.zoom = 12;
+      this.zoom = 8;
     },
     geoError() {
       alert("Could not get geolocation!");
@@ -101,16 +104,9 @@ export default {
       this.item = item;
     },
     centerUpdated(center) {
-      this.center = center;
-      console.log(center);
-      console.log(this.center.lat);
-      console.log(this.center.lng);
+      // this.center = center;
+
       this.fetchMapItems(center);
-      // fetch(
-      //   `https://api.openbrewerydb.org/breweries?by_dist=${this.center.lat},${this.center.lng}&per_page=50`
-      // )
-      //   .then((response) => response.json())
-      //   .then((data) => console.log(data));
     },
     closeDialog() {
       this.dialog = false;
@@ -125,6 +121,10 @@ export default {
   },
   computed: {
     ...mapState("brewsStore", ["fetchedMapItems"]),
+
+    zoomLevel() {
+      return 10;
+    },
 
     selectedBreweryLat() {
       let selectedBrewery = this.brews.filter(

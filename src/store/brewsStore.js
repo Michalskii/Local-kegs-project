@@ -1,12 +1,22 @@
 import { brewsFetch } from '@/services/brewsService';
-import { map } from 'core-js/core/array';
-import 'core-js/es/array';
 
+function getFilteredMapItems(data) {
+	return data.filter((brew) => brew.latitude !== '');
+}
+function getParsedMapObjects(arr1, arr2) {
+	const mergedArray = [...arr1, ...arr2];
+	return [
+		...mergedArray
+			.reduce((map, obj) => map.set(obj.name, obj), new Map())
+			.values(),
+	];
+}
 export default {
 	namespaced: true,
 	state: () => ({
 		brews: [],
 		fetchedMapItems: [],
+		filteredMapItems: [],
 	}),
 	actions: {
 		// fetchBrews({ commit }) {
@@ -28,38 +38,19 @@ export default {
 		updateBrews(state, data) {
 			state.brews = data.filter((brew) => brew.latitude !== '');
 		},
+		// filterBrews(state, data) {
+		// 	state.filteredMapItems = data.filter((brew) => brew.latitude !== '');
+		// },
 
 		pushFetchedMapItems(state, data) {
-			let filteredMapItems = data.filter((brew) => brew.latitude !== '');
+			let filteredMapItems = getFilteredMapItems(data);
 
-			let mergedArray = [...state.fetchedMapItems, ...filteredMapItems];
-			// let uni = [...mergedArray.reduce((map, obj)) => map.set(obj.name, obj), new Map().values];
-			const uniqueData = [
-				...mergedArray
-					.reduce((map, obj) => map.set(obj.name, obj), new Map())
-					.values(),
-			];
+			state.fetchedMapItems = getParsedMapObjects(
+				state.fetchedMapItems,
+				filteredMapItems
+			);
 
-			// console.log(filteredMapItems);
-			// state.fetchedMapItems.push(filteredMapItems);
-			// console.log(state.fetchedMapItems);
-
-			// let newarr = state.fetchedMapItems.concat(
-			// 	filteredMapItems.filter(
-			// 		(item) => state.fetchedMapItems.indexOf(item) < 0
-			// 	)
-			// );
-			// Array.prototype.push.apply(state.fetchedMapItems, filteredMapItems);
-			// var myFinalArray = [
-			// 	...new Set([...state.fetchedMapItems, ...filteredMapItems]),
-			// ];
-			// console.log(myFinalArray);
-
-			console.log(uniqueData);
-			//
-			// let fetchedBrews = data.filter((brew) => brew.latitude !== '');
-			// state.brews.push(fetchedBrews);
-			// console.log(state.brews);
+			console.log(state.fetchedMapItems);
 		},
 	},
 };
