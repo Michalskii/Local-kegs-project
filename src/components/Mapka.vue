@@ -7,30 +7,18 @@
       :brewery="item"
       title="Genre details"
     />
-
-    <div class="button-block test">
-      <button
-        v-if="!$auth.isAuthenticated"
-        @click="login"
-        class="button is-xl is-dark"
-      >
-        Sign Up to Browse Events
-      </button>
-      <h3
-        v-if="$auth.isAuthenticated"
-        class="is-size-3 has-background-dark welcome"
-      >
-        Welcome, {{ $auth.user.name }}!
-      </h3>
-    </div>
-
-    <l-map class="mapka" :zoom="zoom" :center="center">
+    <l-map
+      class="mapka"
+      :zoom="zoom"
+      :center="center"
+      @update:center="centerUpdated"
+    >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <v-marker-cluster>
         <l-marker
           @click="showBrewery(brew)"
           :key="index"
-          v-for="(brew, index) in brews"
+          v-for="(brew, index) in fetchedMapItems"
           :lat-lng="latLng(brew.latitude, brew.longitude)"
         ></l-marker
       ></v-marker-cluster>
@@ -44,6 +32,7 @@ import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 import { mapState } from "vuex";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import InfoDialog from "../components/InfoDialog.vue";
+import { mapActions } from "vuex";
 
 export default {
   name: "Mapka",
@@ -65,16 +54,20 @@ export default {
     return {
       zoom: 4,
       dialog: false,
-      center: L.latLng(30, -80),
-
+      center: [20, -80],
       newCenter: [],
       url: "https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=1a6a86ca467f482da6e3432b72eb7bcc",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     };
   },
+  created() {
+    this.getCurrentLocation();
+  },
 
   methods: {
+    ...mapActions("brewsStore", ["fetchMapItems"]),
+
     latLng(lat, lng) {
       return L.latLng(lat, lng);
     },
@@ -85,16 +78,44 @@ export default {
       this.center = this.newCenter;
       this.newCenter = [];
       this.showInfo(item);
+
+      console.log(jajko);
+    },
+    getCurrentLocation() {
+      navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+    },
+
+    geoSuccess(pos) {
+      let lat = pos.coords.latitude;
+      let lng = pos.coords.longitude;
+      this.center = [lat, lng];
+      this.zoom = 12;
+    },
+    geoError() {
+      alert("Could not get geolocation!");
+      console.log("err");
     },
 
     showInfo(item) {
       this.dialog = true;
       this.item = item;
     },
-
+    centerUpdated(center) {
+      this.center = center;
+      console.log(center);
+      console.log(this.center.lat);
+      console.log(this.center.lng);
+      this.fetchMapItems(center);
+      // fetch(
+      //   `https://api.openbrewerydb.org/breweries?by_dist=${this.center.lat},${this.center.lng}&per_page=50`
+      // )
+      //   .then((response) => response.json())
+      //   .then((data) => console.log(data));
+    },
     closeDialog() {
       this.dialog = false;
     },
+
     reCenter() {
       this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
       this.center = this.newCenter;
@@ -103,7 +124,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("brewsStore", ["brews"]),
+    ...mapState("brewsStore", ["fetchedMapItems"]),
 
     selectedBreweryLat() {
       let selectedBrewery = this.brews.filter(

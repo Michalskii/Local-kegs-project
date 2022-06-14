@@ -25,7 +25,7 @@
         class="my-data-table"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small @click.stop="test(item)"> mdi-delete </v-icon>
+          <v-icon small @click.stop="test(item)"> mdi-heart </v-icon>
         </template>
       </v-data-table>
     </div>
@@ -51,6 +51,7 @@ export default {
     return {
       search: "",
       dialog: false,
+      favs: [],
 
       headers: [
         {
@@ -75,14 +76,35 @@ export default {
       this.item = item;
       console.log(item);
     },
-    test(item) {
-      // this.jajka = this.$auth.user.favs;
-      // this.jajka.push(item);
-      // console.log(item);
-      // this.$auth.user.favs = [];
-      // this.$auth.user.favs.unshift(item);
 
-      console.log(this.$auth.user);
+    test(item) {
+      // let jajko = favs.find(obj.obdb_id => obj.obdb_id !== item.obdb_id)
+      // this.favs.push(item);
+      // const found = this.favs.find((element) => element == item);
+      // console.log(this.favs);
+      // console.log(found.obdb_id);
+      console.log(this.$auth.user.app_metadata);
+
+      // if (found.obdb_id == item.obdb_id) {
+      //   console.log("already there");
+      // } else {
+      //   this.favs.push(item);
+      // }
+      //  if () {
+
+      //  }
+      //  else {
+
+      //  }
+      // if (favs.find(obj.obdb_id => obj.obdb_id !== item.obdb_id) ) {
+      //   this.favs.push(item);
+      // }
+      // else {
+      //   console.log
+      // }
+      // console.log(item);
+      // console.log(this.$auth.user);
+      // this.$auth.user.favs = this.favs;
     },
 
     closeDialog() {

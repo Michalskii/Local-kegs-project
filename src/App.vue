@@ -20,12 +20,12 @@ export default {
   data: () => ({
     //
   }),
-  mounted() {
-    this.fetchBrews();
-  },
-  methods: {
-    ...mapActions("brewsStore", ["fetchBrews"]),
-  },
+  // mounted() {
+  //   this.fetchBrews();
+  // },
+  // methods: {
+  //   ...mapActions("brewsStore", ["fetchBrews"]),
+  // },
   computed: {
     ...mapState("brewsStore", ["brews"]),
   },
