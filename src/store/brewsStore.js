@@ -50,7 +50,7 @@ export default {
 				filteredMapItems
 			);
 
-			console.log(state.fetchedMapItems);
+			// console.log(state.fetchedMapItems);
 		},
 	},
 };

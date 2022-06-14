@@ -7,12 +7,16 @@
       :brewery="item"
       title="Genre details"
     />
+    <span class="test"> {{ bounds }}</span>
+    <span class="test"> Zoom is: {{ zoom }} </span>
 
-    <v-btn @click="test"></v-btn>
     <l-map
       class="mapka"
       :zoom="zoom"
+      :bounds="bounds"
       :center="center"
+      @update:zoom="updateZoom"
+      @update:bounds="updateBounds"
       @update:center="centerUpdated"
     >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
@@ -30,6 +34,8 @@
 
 <script>
 import L from "leaflet";
+import { latLngBounds } from "leaflet";
+
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 import { mapState } from "vuex";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
@@ -55,6 +61,12 @@ export default {
   data: function () {
     return {
       zoom: 11,
+      bounds: latLngBounds([
+        [
+          [40.70081290280357, -74.26963806152345],
+          [40.82991732677597, -74.08716201782228],
+        ],
+      ]),
       dialog: false,
       center: [20, -80],
       newCenter: [],
@@ -73,9 +85,17 @@ export default {
     latLng(lat, lng) {
       return L.latLng(lat, lng);
     },
-    test() {
+    updateBounds(bounds) {
+      this.bounds = bounds;
+      console.log(bounds);
+    },
+    updateZoom(zoom) {
+      this.zoom = zoom;
+      console.log(zoom);
+
       console.log(this.zoom);
     },
+
     showBrewery(item) {
       let ltd = item.latitude;
       let lng = item.longitude;
@@ -104,9 +124,9 @@ export default {
       this.item = item;
     },
     centerUpdated(center) {
-      // this.center = center;
-
-      this.fetchMapItems(center);
+      if (this.zoom < 3) {
+        this.fetchMapItems(center);
+      }
     },
     closeDialog() {
       this.dialog = false;
@@ -121,10 +141,6 @@ export default {
   },
   computed: {
     ...mapState("brewsStore", ["fetchedMapItems"]),
-
-    zoomLevel() {
-      return 10;
-    },
 
     selectedBreweryLat() {
       let selectedBrewery = this.brews.filter(
