@@ -5,6 +5,7 @@ import Map from '../views/Map.vue';
 import Search from '../views/Search.vue';
 import Profile from '../views/Profile.vue';
 import { authGuard } from '../auth/authGuard';
+import ExternalApi from '../views/ExternalApi';
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,11 @@ const routes = [
 		path: '/home',
 		name: 'home',
 		component: HomeView,
+	},
+	{
+		path: '/api',
+		name: 'external-api',
+		component: ExternalApi,
 	},
 	{
 		path: '/map',

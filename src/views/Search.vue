@@ -4,7 +4,6 @@
       <h2 class="text-center">
         Search for a specific brewery by it's name, location or type
       </h2>
-      <v-btn @click="test"></v-btn>
       <v-text-field
         append-icon="mdi-magnify"
         label="Search"
@@ -12,14 +11,14 @@
         class="searchBar"
         single-line
         outlined
+        @input="getResults"
         dark
         hide-details
       />
 
       <v-data-table
         :headers="headers"
-        :items="brews"
-        :search="search"
+        :items="test"
         dark
         @click:row="showInfo"
         :items-per-page="5"
@@ -53,6 +52,7 @@ export default {
       search: "",
       dialog: false,
       favs: [],
+      test: [],
 
       headers: [
         {
@@ -72,40 +72,18 @@ export default {
     ...mapState("brewsStore", ["brews"]),
   },
   methods: {
+    getResults() {
+      fetch(
+        `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
+      )
+        .then((response) => response.json())
+        .then((data) => (this.test = data));
+      console.log(this.search);
+    },
     showInfo(item) {
       this.dialog = true;
       this.item = item;
       console.log(item);
-    },
-
-    test(item) {
-      // let jajko = favs.find(obj.obdb_id => obj.obdb_id !== item.obdb_id)
-      // this.favs.push(item);
-      // const found = this.favs.find((element) => element == item);
-      // console.log(this.favs);
-      // console.log(found.obdb_id);
-      console.log(this.$auth.user.name);
-
-      // if (found.obdb_id == item.obdb_id) {
-      //   console.log("already there");
-      // } else {
-      //   this.favs.push(item);
-      // }
-      //  if () {
-
-      //  }
-      //  else {
-
-      //  }
-      // if (favs.find(obj.obdb_id => obj.obdb_id !== item.obdb_id) ) {
-      //   this.favs.push(item);
-      // }
-      // else {
-      //   console.log
-      // }
-      // console.log(item);
-      // console.log(this.$auth.user);
-      // this.$auth.user.favs = this.favs;
     },
 
     closeDialog() {

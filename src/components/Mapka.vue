@@ -20,14 +20,17 @@
       @update:center="centerUpdated"
     >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <v-marker-cluster>
+      <!-- <v-marker-cluster>
         <l-marker
           @click="showBrewery(brew)"
           :key="index"
           v-for="(brew, index) in fetchedMapItems"
           :lat-lng="latLng(brew.latitude, brew.longitude)"
         ></l-marker
-      ></v-marker-cluster>
+      ></v-marker-cluster> -->
+      <l-marker :lat-lng="markerLatLng"></l-marker>
+      <l-marker :lat-lng="markerLatLng2"></l-marker>
+      <l-marker :lat-lng="latLng(browar.latitude, browar.longitude)"></l-marker>
     </l-map>
   </div>
 </template>
@@ -61,6 +64,29 @@ export default {
   data: function () {
     return {
       zoom: 11,
+      markerLatLng: [51.504, -0.159],
+      markerLatLng2: [-51.504, -0.159],
+      markers: [this.markerLatLng, this.markerLatLng2],
+      browar: {
+        id: "madtree-brewing-cincinnati",
+        name: "MadTree Brewing",
+        brewery_type: "regional",
+        street: "3301 Madison Rd",
+        address_2: null,
+        address_3: null,
+        city: "Cincinnati",
+        state: "Ohio",
+        county_province: null,
+        postal_code: "45209-1132",
+        country: "United States",
+        longitude: "-84.4239715",
+        latitude: "39.1563725",
+        phone: "5138368733",
+        website_url: "http://www.madtreebrewing.com",
+        updated_at: "2021-10-23T02:24:55.243Z",
+        created_at: "2021-10-23T02:24:55.243Z",
+      },
+
       bounds: latLngBounds([
         [
           [40.70081290280357, -74.26963806152345],
@@ -85,15 +111,22 @@ export default {
     latLng(lat, lng) {
       return L.latLng(lat, lng);
     },
+
     updateBounds(bounds) {
       this.bounds = bounds;
-      console.log(bounds);
+      // this.markers.forEach((marker) => bounds.contains(marker));
+      let jajko = this.latLng(this.browar.latitude, this.browar.longitude);
+      console.log(this.latLng(this.browar.latitude, this.browar.longitude));
+      bounds.contains(jajko);
+
+      // if (bounds.contains(jajko)) {
+      //   console.log("contains");
+      // } else {
+      //   console.log("nooot");
+      // }
     },
     updateZoom(zoom) {
       this.zoom = zoom;
-      console.log(zoom);
-
-      console.log(this.zoom);
     },
 
     showBrewery(item) {

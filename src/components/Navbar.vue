@@ -13,7 +13,8 @@
       <v-col class="text-right">
         <router-link to="/map" class="links">Map</router-link>
         <router-link to="/search" class="links">Search</router-link>
-        <router-link to="/profile">Profile</router-link>
+        <router-link to="/profile" class="links">Profile</router-link>
+        <router-link to="/api" class="links">api</router-link>
       </v-col></v-row
     >
 
