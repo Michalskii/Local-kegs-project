@@ -25,9 +25,12 @@ export default {
 		// 		.then((data) => commit('updateBrews', data));
 		// },
 
-		fetchMapItems({ commit }, mapCenter) {
+		fetchMapItems({ commit }, payload) {
+			let a = payload.a;
+			let b = payload.b;
+			let c = payload.c;
 			fetch(
-				`https://api.openbrewerydb.org/breweries?by_dist=${mapCenter.lat},${mapCenter.lng}&per_page=50`
+				`https://api.openbrewerydb.org/breweries?by_dist=${a},${b}&per_page=50&page=${c}`
 			)
 				.then((response) => response.json())
 				.then((data) => commit('pushFetchedMapItems', data));
@@ -49,6 +52,7 @@ export default {
 				state.fetchedMapItems,
 				filteredMapItems
 			);
+			console.log(state.fetchedMapItems);
 
 			// console.log(state.fetchedMapItems);
 		},

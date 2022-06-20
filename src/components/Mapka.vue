@@ -9,7 +9,6 @@
     />
     <span class="test"> {{ bounds }}</span>
     <span class="test"> Zoom is: {{ zoom }} </span>
-
     <l-map
       class="mapka"
       :zoom="zoom"
@@ -17,20 +16,17 @@
       :center="center"
       @update:zoom="updateZoom"
       @update:bounds="updateBounds"
-      @update:center="centerUpdated"
+      @update:center="centerUpdatedd"
     >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <!-- <v-marker-cluster>
+      <v-marker-cluster>
         <l-marker
           @click="showBrewery(brew)"
           :key="index"
           v-for="(brew, index) in fetchedMapItems"
           :lat-lng="latLng(brew.latitude, brew.longitude)"
         ></l-marker
-      ></v-marker-cluster> -->
-      <l-marker :lat-lng="markerLatLng"></l-marker>
-      <l-marker :lat-lng="markerLatLng2"></l-marker>
-      <l-marker :lat-lng="latLng(browar.latitude, browar.longitude)"></l-marker>
+      ></v-marker-cluster>
     </l-map>
   </div>
 </template>
@@ -64,28 +60,8 @@ export default {
   data: function () {
     return {
       zoom: 11,
-      markerLatLng: [51.504, -0.159],
-      markerLatLng2: [-51.504, -0.159],
-      markers: [this.markerLatLng, this.markerLatLng2],
-      browar: {
-        id: "madtree-brewing-cincinnati",
-        name: "MadTree Brewing",
-        brewery_type: "regional",
-        street: "3301 Madison Rd",
-        address_2: null,
-        address_3: null,
-        city: "Cincinnati",
-        state: "Ohio",
-        county_province: null,
-        postal_code: "45209-1132",
-        country: "United States",
-        longitude: "-84.4239715",
-        latitude: "39.1563725",
-        phone: "5138368733",
-        website_url: "http://www.madtreebrewing.com",
-        updated_at: "2021-10-23T02:24:55.243Z",
-        created_at: "2021-10-23T02:24:55.243Z",
-      },
+      markers: [],
+      page: 1,
 
       bounds: latLngBounds([
         [
@@ -112,19 +88,61 @@ export default {
       return L.latLng(lat, lng);
     },
 
+    getLatLngOfMarkers(array) {
+      return array.map((item) => this.latLng(item.latitude, item.longitude));
+    },
+
+    // async pobierz() {
+    //   let payload = {
+    //     a: this.center.lat,
+    //     b: this.center.lng,
+    //     c: this.page,
+    //   };
+    //   await this.fetchMapItems(payload);
+    //   let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
+    //   if (markers.length > 0) {
+    //     if (markers.every((marker) => this.bounds.contains(marker))) {
+    //       this.page++;
+    //       this.pobierz();
+    //     }
+    //   }
+    // },
+
     updateBounds(bounds) {
       this.bounds = bounds;
-      // this.markers.forEach((marker) => bounds.contains(marker));
-      let jajko = this.latLng(this.browar.latitude, this.browar.longitude);
-      console.log(this.latLng(this.browar.latitude, this.browar.longitude));
-      bounds.contains(jajko);
 
-      // if (bounds.contains(jajko)) {
-      //   console.log("contains");
-      // } else {
-      //   console.log("nooot");
-      // }
+      let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
+
+      let payload = {
+        a: this.center.lat,
+        b: this.center.lng,
+        c: this.page,
+      };
+      this.fetchMapItems(payload);
+
+      // this.pobierz();
+
+      if (markers.length > 0) {
+        if (markers.every((marker) => bounds.contains(marker))) {
+          this.fetchMapItems(payload);
+          console.log("all markers within bounds, loading next page");
+          if (!markers.every((marker) => bounds.contains(marker))) {
+            this.page = 1;
+            console.log(this.page);
+          } else {
+            this.page++;
+            this.fetchMapItems(payload);
+            console.log(`loading page ${this.page}`);
+          }
+          console.log(this.page);
+        } else {
+          this.page = 1;
+          console.log("markers outside bounds");
+          console.log(this.page);
+        }
+      }
     },
+
     updateZoom(zoom) {
       this.zoom = zoom;
     },
@@ -156,10 +174,18 @@ export default {
       this.dialog = true;
       this.item = item;
     },
+    centerUpdatedd(center) {
+      this.center = center;
+      return center;
+    },
     centerUpdated(center) {
-      if (this.zoom < 3) {
-        this.fetchMapItems(center);
-      }
+      // let payload = {
+      //   a: center.lat,
+      //   b: center.lng,
+      //   c: this.page,
+      // };
+      console.log(payload);
+      // this.fetchMapItems(payload);
     },
     closeDialog() {
       this.dialog = false;
@@ -182,6 +208,7 @@ export default {
       let coords = selectedBrewery[0];
       return coords.latitude;
     },
+
     selectedBreweryLng() {
       let selectedBrewery = this.brews.filter(
         (brew) => brew.obdb_id == this.selectedItem
