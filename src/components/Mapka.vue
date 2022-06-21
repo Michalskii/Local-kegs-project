@@ -80,7 +80,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("brewsStore", ["fetchMapItems", "clear"]),
+    ...mapActions("brewsStore", ["fetchMapItems"]),
 
     latLng(lat, lng) {
       return L.latLng(lat, lng);
@@ -90,22 +90,29 @@ export default {
       return array.map((item) => this.latLng(item.latitude, item.longitude));
     },
 
-    pobierz(bounds) {
+    async pobierz(bounds) {
       this.bounds = bounds;
       let payload = {
         a: this.center.lat,
         b: this.center.lng,
         c: this.page,
       };
-      this.fetchMapItems(payload);
+      await this.fetchMapItems(payload);
 
       // let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
       // console.log(markers);
-      if (this.checkMarkersWithinBounds() == true) {
+
+      if (
+        this.checkMarkersWithinBounds() == true &&
+        this.lastFetched.length > 0
+      ) {
         this.page++;
         setTimeout(() => {
-          this.pobierz();
-        }, 1000);
+          this.pobierz(bounds);
+        }, 50);
+
+        // this.pobierz(bounds);
+        console.log(this.page);
         // this.pobierz();
         console.log("markers within bounds");
       } else {
@@ -114,11 +121,11 @@ export default {
     },
 
     checkMarkersWithinBounds() {
-      let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
-      if (markers.length) {
-        console.log(markers.includes(undefined));
-        console.log(markers);
+      let markers = this.getLatLngOfMarkers(this.lastFetched);
+      // console.log(markers);
+      if (this.lastFetched.length > 0) {
         return markers.every((marker) => this.bounds.contains(marker));
+      } else {
       }
     },
 
@@ -227,7 +234,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("brewsStore", ["fetchedMapItems"]),
+    ...mapState("brewsStore", ["fetchedMapItems", "lastFetched"]),
 
     selectedBreweryLat() {
       let selectedBrewery = this.brews.filter(

@@ -17,6 +17,7 @@ export default {
 		brews: [],
 		fetchedMapItems: [],
 		filteredMapItems: [],
+		lastFetched: [],
 	}),
 	actions: {
 		// fetchBrews({ commit }) {
@@ -35,9 +36,6 @@ export default {
 				.then((response) => response.json())
 				.then((data) => commit('pushFetchedMapItems', data));
 		},
-		clear({ commit }) {
-			commit('CLEAR');
-		},
 	},
 
 	mutations: {
@@ -47,13 +45,13 @@ export default {
 		// filterBrews(state, data) {
 		// 	state.filteredMapItems = data.filter((brew) => brew.latitude !== '');
 		// },
-		CLEAR(state) {
-			state.fetchedMapItems = [];
-		},
 
 		pushFetchedMapItems(state, data) {
+			// console.log(state.lastFetched);
+			// state.lastFetched = [];
 			let filteredMapItems = getFilteredMapItems(data);
-
+			state.lastFetched = getFilteredMapItems(data);
+			// console.log(state.lastFetched);
 			state.fetchedMapItems = getParsedMapObjects(
 				state.fetchedMapItems,
 				filteredMapItems
