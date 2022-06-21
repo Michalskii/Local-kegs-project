@@ -103,8 +103,10 @@ export default {
       // console.log(markers);
       if (this.checkMarkersWithinBounds() == true) {
         this.page++;
-
-        this.pobierz();
+        setTimeout(() => {
+          this.pobierz();
+        }, 1000);
+        // this.pobierz();
         console.log("markers within bounds");
       } else {
         console.log("markers outside bounds");
@@ -114,6 +116,7 @@ export default {
     checkMarkersWithinBounds() {
       let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
       if (markers.length) {
+        console.log(markers.includes(undefined));
         console.log(markers);
         return markers.every((marker) => this.bounds.contains(marker));
       }
