@@ -114,6 +114,7 @@ export default {
     checkMarkersWithinBounds() {
       let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
       if (markers.length) {
+        console.log(markers);
         return markers.every((marker) => this.bounds.contains(marker));
       }
     },

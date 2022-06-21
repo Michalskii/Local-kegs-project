@@ -1,7 +1,7 @@
 import { brewsFetch } from '@/services/brewsService';
 
 function getFilteredMapItems(data) {
-	return data.filter((brew) => brew.latitude !== '');
+	return data.filter((brew) => brew.latitude !== '' && brew.longitude !== '');
 }
 function getParsedMapObjects(arr1, arr2) {
 	const mergedArray = [...arr1, ...arr2];
