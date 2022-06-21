@@ -1,7 +1,7 @@
 import { brewsFetch } from '@/services/brewsService';
 
 function getFilteredMapItems(data) {
-	return data.filter((brew) => brew.latitude !== '' && brew.longitude !== '');
+	return data.filter((brew) => brew.latitude !== '');
 }
 function getParsedMapObjects(arr1, arr2) {
 	const mergedArray = [...arr1, ...arr2];
@@ -14,9 +14,7 @@ function getParsedMapObjects(arr1, arr2) {
 export default {
 	namespaced: true,
 	state: () => ({
-		brews: [],
 		fetchedMapItems: [],
-		filteredMapItems: [],
 		lastFetched: [],
 	}),
 	actions: {
@@ -26,39 +24,35 @@ export default {
 		// 		.then((data) => commit('updateBrews', data));
 		// },
 
-		fetchMapItems({ commit }, payload) {
+		async fetchMapItems({ commit }, payload) {
 			let a = payload.a;
 			let b = payload.b;
 			let c = payload.c;
-			fetch(
+
+			const fetchedItems = await fetch(
 				`https://api.openbrewerydb.org/breweries?by_dist=${a},${b}&per_page=50&page=${c}`
-			)
-				.then((response) => response.json())
-				.then((data) => commit('pushFetchedMapItems', data));
+			).then((response) => response.json());
+
+			commit('pushFetchedMapItems', fetchedItems);
+
+			return getFilteredMapItems(fetchedItems);
 		},
 	},
 
 	mutations: {
-		updateBrews(state, data) {
-			state.brews = data.filter((brew) => brew.latitude !== '');
-		},
+		// updateBrews(state, data) {
+		// 	state.brews = data.filter((brew) => brew.latitude !== '');
+		// },
 		// filterBrews(state, data) {
 		// 	state.filteredMapItems = data.filter((brew) => brew.latitude !== '');
 		// },
 
 		pushFetchedMapItems(state, data) {
-			// console.log(state.lastFetched);
-			// state.lastFetched = [];
-			let filteredMapItems = getFilteredMapItems(data);
 			state.lastFetched = getFilteredMapItems(data);
-			// console.log(state.lastFetched);
 			state.fetchedMapItems = getParsedMapObjects(
 				state.fetchedMapItems,
-				filteredMapItems
+				state.lastFetched
 			);
-			// console.log(state.fetchedMapItems);
-
-			// console.log(state.fetchedMapItems);
 		},
 	},
 };

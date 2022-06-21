@@ -7,14 +7,14 @@
       :brewery="item"
       title=""
     />
-    <v-btn @click="checkMarkersWithinBounds"></v-btn>
+    {{ zoom }}
     <l-map
       class="mapka"
       :zoom="zoom"
       :bounds="bounds"
       :center="center"
       @update:zoom="updateZoom"
-      @update:bounds="pobierz"
+      @update:bounds="updateBounds"
       @update:center="centerUpdated"
     >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
@@ -58,9 +58,10 @@ export default {
 
   data: function () {
     return {
-      zoom: 11,
+      zoom: 1,
       markers: [],
       page: 1,
+      lastFetchedMarkers: [],
       bounds: latLngBounds([
         [
           [51.70081290280357, 0.26963806152345],
@@ -90,48 +91,40 @@ export default {
       return array.map((item) => this.latLng(item.latitude, item.longitude));
     },
 
-    async pobierz(bounds) {
-      this.bounds = bounds;
+    async fetchNewMarkers() {
+      // this.bounds = bounds;
       let payload = {
         a: this.center.lat,
         b: this.center.lng,
         c: this.page,
       };
-      await this.fetchMapItems(payload);
-
-      // let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
-      // console.log(markers);
+      console.log(this.lastFetchedMarkers);
+      this.fetchMapItems(payload);
+      this.lastFetchedMarkers = await this.fetchMapItems(payload);
 
       if (
         this.checkMarkersWithinBounds() == true &&
-        this.lastFetched.length > 0
+        this.lastFetchedMarkers.length > 0
       ) {
         this.page++;
         setTimeout(() => {
-          this.pobierz(bounds);
+          this.fetchNewMarkers();
         }, 10);
-
-        // this.pobierz(bounds);
-        // console.log(this.page);
-        // this.pobierz();
-        // console.log("markers within bounds");
+      } else {
+        this.page = 1;
       }
-      // else {
-      //   console.log("markers outside bounds");
-      // }
     },
 
     checkMarkersWithinBounds() {
-      let markers = this.getLatLngOfMarkers(this.lastFetched);
-      // console.log(markers);
-      if (this.lastFetched.length > 0) {
+      let markers = this.getLatLngOfMarkers(this.lastFetchedMarkers);
+      if (this.lastFetchedMarkers.length > 0) {
         return markers.every((marker) => this.bounds.contains(marker));
-      } else {
       }
     },
 
     updateBounds(bounds) {
       this.bounds = bounds;
+      this.fetchNewMarkers();
       return bounds;
     },
 
@@ -155,7 +148,7 @@ export default {
       let lat = pos.coords.latitude;
       let lng = pos.coords.longitude;
       this.center = [lat, lng];
-      this.zoom = 8;
+      this.zoom = 1;
       let payload = {
         a: lat,
         b: lng,
@@ -191,7 +184,7 @@ export default {
       this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
       this.center = this.newCenter;
       this.newCenter = [];
-      this.zoom = 14;
+      this.zoom = 1;
     },
   },
   computed: {

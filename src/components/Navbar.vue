@@ -1,6 +1,6 @@
 <template>
   <v-toolbar flat color="rgba(1, 1, 1, 0.4)" class="nav">
-    <v-row class="linka">
+    <v-row class="navItems">
       <v-col class="dupa text-left">
         <router-link to="home" class="links"
           ><v-icon color="white" large>mdi-glass-mug</v-icon> Local
@@ -15,14 +15,14 @@
         <router-link to="/profile" class="links">Profile</router-link>
         <router-link to="/api" class="links">Api</router-link>
       </v-col>
-      <div v-if="!$auth.loading" class="pt-10 links">
+      <v-col v-if="!$auth.loading" class="">
         <a v-if="!$auth.isAuthenticated" @click="login" class="links"
           ><strong>Sign in</strong></a
         >
         <a v-if="$auth.isAuthenticated" @click="logout" class="links"
           ><strong>Log out</strong></a
         >
-      </div>
+      </v-col>
     </v-row>
 
     <!-- <div v-if="!$auth.loading" class="pt-10">
@@ -61,7 +61,7 @@ export default {
   // padding-top: 40px;
 }
 
-.linka {
+.navItems {
   margin-top: auto;
 }
 .links {
