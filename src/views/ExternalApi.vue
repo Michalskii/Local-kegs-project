@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button @click="callApi">Call</button>
+    <!-- <button @click="callApi">Call</button> -->
+    <v-btn @click="callApi">Call api</v-btn>
   </div>
 </template>
 
