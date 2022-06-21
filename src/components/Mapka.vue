@@ -15,7 +15,7 @@
       :center="center"
       @update:zoom="updateZoom"
       @update:bounds="pobierz"
-      @update:center="centerUpdatedd"
+      @update:center="centerUpdated"
     >
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <v-marker-cluster>
@@ -109,15 +109,16 @@ export default {
         this.page++;
         setTimeout(() => {
           this.pobierz(bounds);
-        }, 50);
+        }, 10);
 
         // this.pobierz(bounds);
-        console.log(this.page);
+        // console.log(this.page);
         // this.pobierz();
-        console.log("markers within bounds");
-      } else {
-        console.log("markers outside bounds");
+        // console.log("markers within bounds");
       }
+      // else {
+      //   console.log("markers outside bounds");
+      // }
     },
 
     checkMarkersWithinBounds() {
@@ -131,39 +132,7 @@ export default {
 
     updateBounds(bounds) {
       this.bounds = bounds;
-
-      // let markers = this.getLatLngOfMarkers(this.fetchedMapItems);
-
-      // let payload = {
-      //   a: this.center.lat,
-      //   b: this.center.lng,
-      //   c: this.page,
-      // };
-      // this.fetchMapItems();
-
-      // this.pobierz();
-
-      // if (markers.length < 0) {
-      //   if (markers.every((marker) => bounds.contains(marker))) {
-      //     // this.fetchMapItems(payload);
-      //     this.updateBounds(bounds);
-      //     console.log("all markers within bounds, loading next page");
-      //     if (!markers.every((marker) => bounds.contains(marker))) {
-      //       this.page = 1;
-      //       console.log(this.page);
-      //     } else {
-      //       this.page++;
-      //       // this.fetchMapItems(payload);
-      //       this.updateBounds(bounds);
-      //       console.log(`loading page ${this.page}`);
-      //     }
-      //     console.log(this.page);
-      //   } else {
-      //     this.page = 1;
-      //     console.log("markers outside bounds");
-      //     console.log(this.page);
-      //   }
-      // }
+      return bounds;
     },
 
     updateZoom(zoom) {
@@ -209,19 +178,11 @@ export default {
       this.dialog = true;
       this.item = item;
     },
-    centerUpdatedd(center) {
+    centerUpdated(center) {
       this.center = center;
       return center;
     },
-    centerUpdated(center) {
-      // let payload = {
-      //   a: center.lat,
-      //   b: center.lng,
-      //   c: this.page,
-      // };
-      console.log(payload);
-      // this.fetchMapItems(payload);
-    },
+
     closeDialog() {
       this.dialog = false;
     },
@@ -237,7 +198,7 @@ export default {
     ...mapState("brewsStore", ["fetchedMapItems", "lastFetched"]),
 
     selectedBreweryLat() {
-      let selectedBrewery = this.brews.filter(
+      let selectedBrewery = this.fetchedMapItems.filter(
         (brew) => brew.obdb_id == this.selectedItem
       );
       let coords = selectedBrewery[0];
@@ -245,7 +206,7 @@ export default {
     },
 
     selectedBreweryLng() {
-      let selectedBrewery = this.brews.filter(
+      let selectedBrewery = this.fetchedMapItems.filter(
         (brew) => brew.obdb_id == this.selectedItem
       );
       let coords = selectedBrewery[0];

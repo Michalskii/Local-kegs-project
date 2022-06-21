@@ -4,7 +4,7 @@
       v-model="searchedItem"
       dark
       @change="selectItem"
-      :items="brews"
+      :items="fetchedMapItems"
       item-text="name"
       label="Search"
       item-value="obdb_id"
@@ -37,7 +37,7 @@ export default {
   },
 
   computed: {
-    ...mapState("brewsStore", ["brews"]),
+    ...mapState("brewsStore", ["fetchedMapItems"]),
   },
 };
 </script>

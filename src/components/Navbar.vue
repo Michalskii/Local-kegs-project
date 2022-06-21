@@ -6,26 +6,33 @@
           ><v-icon color="white" large>mdi-glass-mug</v-icon> Local
           kegs</router-link
         ></v-col
-      ></v-row
-    >
-    <v-row>
+      >
+
       <!-- <v-spacer></v-spacer> -->
       <v-col class="text-right">
         <router-link to="/map" class="links">Map</router-link>
         <router-link to="/search" class="links">Search</router-link>
         <router-link to="/profile" class="links">Profile</router-link>
-        <router-link to="/api" class="links">api</router-link>
-      </v-col></v-row
-    >
+        <router-link to="/api" class="links">Api</router-link>
+      </v-col>
+      <div v-if="!$auth.loading" class="pt-10 links">
+        <a v-if="!$auth.isAuthenticated" @click="login" class="links"
+          ><strong>Sign in</strong></a
+        >
+        <a v-if="$auth.isAuthenticated" @click="logout" class="links"
+          ><strong>Log out</strong></a
+        >
+      </div>
+    </v-row>
 
-    <div v-if="!$auth.loading" class="pt-10">
+    <!-- <div v-if="!$auth.loading" class="pt-10">
       <a v-if="!$auth.isAuthenticated" @click="login" class="links"
         ><strong>Sign in</strong></a
       >
       <a v-if="$auth.isAuthenticated" @click="logout" class="links"
         ><strong>Log out</strong></a
       >
-    </div>
+    </div> -->
   </v-toolbar>
 </template>
 
