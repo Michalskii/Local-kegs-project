@@ -3,7 +3,7 @@
     <div class="text-center pt-7">
       <!-- <img :src="$auth.user.picture" /> -->
       <h2>{{ this.$auth.user.name }}</h2>
-      <p>{{ this.$auth.user.email }}</p>
+      <p>{{ this.$auth.user.sub }}</p>
     </div>
 
     <div class="text-center">
