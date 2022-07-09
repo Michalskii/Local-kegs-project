@@ -1,5 +1,6 @@
 <template>
   <v-container class="">
+    <FetchUserMetadata v-if="$auth.isAuthenticated" />
     <div class="header">
       <h2 class="text-center">
         Search for a specific brewery by it's name, location or type
@@ -11,19 +12,23 @@
         class="searchBar"
         single-line
         outlined
+        @input="getResults"
         dark
         hide-details
       />
 
       <v-data-table
         :headers="headers"
-        :items="brews"
-        :search="search"
+        :items="searchResults"
         dark
         @click:row="showInfo"
         :items-per-page="5"
         class="my-data-table"
-      ></v-data-table>
+      >
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon small @click.stop="addToFavs(item)"> mdi-heart </v-icon>
+        </template>
+      </v-data-table>
     </div>
 
     <info-dialog
@@ -40,13 +45,17 @@
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 import InfoDialog from "../components/InfoDialog.vue";
+import axios from "axios";
+import FetchUserMetadata from "../components/FetchUserMetadata.vue";
+
 export default {
   name: "Search",
-  components: { InfoDialog },
+  components: { InfoDialog, FetchUserMetadata },
   data() {
     return {
       search: "",
       dialog: false,
+      searchResults: [],
       headers: [
         {
           text: "Name",
@@ -56,18 +65,40 @@ export default {
         { text: "City", value: "city" },
 
         { text: "Type", value: "brewery_type" },
+        { text: "Add to favs", value: "actions" },
       ],
     };
   },
 
   computed: {
-    ...mapState("brewsStore", ["brews"]),
+    ...mapState("brewsStore", ["brews", "userFavs"]),
+
+    userId() {
+      return this.$auth.user.sub.slice(6);
+    },
   },
+
   methods: {
+    ...mapActions("brewsStore", ["fetchUserFavs", "addNewFav", "patchFavList"]),
+    getResults() {
+      fetch(
+        `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
+      )
+        .then((response) => response.json())
+        .then((data) => (this.searchResults = data));
+    },
+
     showInfo(item) {
       this.dialog = true;
       this.item = item;
-      console.log(item);
+    },
+    addToFavs(item) {
+      if (this.$auth.isAuthenticated) {
+        this.addNewFav(item);
+        this.patchFavList(this.userId);
+      } else {
+        alert("Please log in");
+      }
     },
 
     closeDialog() {

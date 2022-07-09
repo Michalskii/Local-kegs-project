@@ -33,10 +33,15 @@
         <span class="dsas mt-3">Phone: {{ brewery.phone }}</span>
       </v-row>
       <v-row>
-        <span class="dsas mt-3 mb-16"
+        <span class="dsas mt-3"
           >Website:
           <v-icon @click="openBrewSite" color="black">mdi-cross-celtic</v-icon>
         </span>
+      </v-row>
+      <v-row v-if="$auth.isAuthenticated">
+        <span class="dsas mt-3 mb-16"
+          >Add to favourites <v-icon @click="addToFavs">mdi-heart</v-icon></span
+        >
       </v-row>
     </v-card>
   </v-dialog>
