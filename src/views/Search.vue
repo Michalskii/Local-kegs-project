@@ -19,7 +19,7 @@
 
       <v-data-table
         :headers="headers"
-        :items="test"
+        :items="searchResults"
         dark
         @click:row="showInfo"
         :items-per-page="5"
@@ -55,7 +55,7 @@ export default {
     return {
       search: "",
       dialog: false,
-      test: [],
+      searchResults: [],
       headers: [
         {
           text: "Name",
@@ -85,7 +85,7 @@ export default {
         `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
       )
         .then((response) => response.json())
-        .then((data) => (this.test = data));
+        .then((data) => (this.searchResults = data));
     },
 
     showInfo(item) {

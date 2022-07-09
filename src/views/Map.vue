@@ -1,6 +1,6 @@
  <template>
   <div class="brewMap">
-    <v-autocomplete
+    <!-- <v-autocomplete
       v-model="searchedItem"
       dark
       @change="selectItem"
@@ -10,7 +10,7 @@
       item-value="obdb_id"
       class="searchInput"
     >
-    </v-autocomplete>
+    </v-autocomplete> -->
     <mapka :selectedItem="searchedItem" />
   </div>
 </template>
