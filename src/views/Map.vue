@@ -44,6 +44,7 @@ export default {
 <style scoped>
 .brewMap {
   height: 100%;
+  margin-top: 100px;
 }
 .searchInput {
   max-width: 200px;
