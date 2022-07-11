@@ -7,7 +7,6 @@
       :brewery="item"
       title=""
     />
-    {{ zoom }}
     <l-map
       class="mapka"
       :zoom="zoom"
