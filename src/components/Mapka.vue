@@ -1,5 +1,11 @@
 <template>
   <div class="map">
+    <v-progress-circular
+      class="loader"
+      v-show="loading"
+      indeterminate
+      color="white"
+    ></v-progress-circular>
     <info-dialog
       v-if="dialog"
       @close="closeDialog"
@@ -40,6 +46,10 @@ import InfoDialog from "../components/InfoDialog.vue";
 import { mapActions } from "vuex";
 
 export default {
+  mounted() {
+    this.loading = false;
+    console.log("loading finised");
+  },
   name: "Mapka",
   props: {
     selectedItem: {
@@ -59,6 +69,7 @@ export default {
     return {
       zoom: 1,
       markers: [],
+      loading: true,
       page: 1,
       lastFetchedMarkers: [],
       bounds: latLngBounds([
@@ -227,5 +238,10 @@ export default {
 }
 .mapka {
   z-index: 2;
+}
+.loader {
+  position: absolute;
+  top: 40%;
+  left: 46%;
 }
 </style>

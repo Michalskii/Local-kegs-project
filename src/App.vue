@@ -1,7 +1,9 @@
 <template>
   <v-app class="mainBody">
+    <FetchUserMetadata v-if="$auth.isAuthenticated" />
+
     <navbar />
-    <v-main>
+    <v-main class="pl-2">
       <router-view />
     </v-main>
   </v-app>
@@ -11,10 +13,13 @@
 import Navbar from "../src/components/Navbar.vue";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
+import FetchUserMetadata from "@/components/FetchUserMetadata.vue";
+
 export default {
   name: "App",
   components: {
     Navbar,
+    FetchUserMetadata,
   },
 
   data: () => ({

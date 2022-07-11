@@ -86,9 +86,8 @@ export default {
       app
       light
       clipped
-      height="50%"
+      height="30%"
     >
-      <!-- <v-divider></v-divider> -->
       <v-list>
         <v-list-item
           v-for="link in links"

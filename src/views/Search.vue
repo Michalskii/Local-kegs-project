@@ -1,6 +1,6 @@
 <template>
   <v-container class="">
-    <FetchUserMetadata v-if="$auth.isAuthenticated" />
+    <!-- <FetchUserMetadata v-if="$auth.isAuthenticated" /> -->
     <div class="header">
       <h2 class="text-center">
         Search for a specific brewery by it's name, location or type
@@ -46,11 +46,11 @@ import { mapState } from "vuex";
 import { mapActions } from "vuex";
 import InfoDialog from "../components/InfoDialog.vue";
 import axios from "axios";
-import FetchUserMetadata from "../components/FetchUserMetadata.vue";
+// import FetchUserMetadata from "../components/FetchUserMetadata.vue";
 
 export default {
   name: "Search",
-  components: { InfoDialog, FetchUserMetadata },
+  components: { InfoDialog },
   data() {
     return {
       search: "",
@@ -80,6 +80,7 @@ export default {
 
   methods: {
     ...mapActions("brewsStore", ["fetchUserFavs", "addNewFav", "patchFavList"]),
+
     getResults() {
       fetch(
         `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
