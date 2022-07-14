@@ -145,7 +145,10 @@ export default {
     showBrewery(item) {
       let ltd = item.latitude;
       let lng = item.longitude;
-      this.center = [item.latitude, item.longitude];
+      this.newCenter.push(ltd, lng);
+      this.center = this.newCenter;
+      this.newCenter = [];
+      this.showInfo(item);
     },
     getCurrentLocation() {
       navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
@@ -180,19 +183,19 @@ export default {
     },
     centerUpdated(center) {
       this.center = center;
-      // return center;
+      return center;
     },
 
     closeDialog() {
       this.dialog = false;
     },
 
-    // reCenter() {
-    //   this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
-    //   this.center = this.newCenter;
-    //   this.newCenter = [];
-    //   this.zoom = 1;
-    // },
+    reCenter() {
+      this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
+      this.center = this.newCenter;
+      this.newCenter = [];
+      this.zoom = 1;
+    },
   },
   computed: {
     ...mapState("brewsStore", ["fetchedMapItems", "lastFetched"]),
@@ -214,9 +217,9 @@ export default {
     },
   },
   watch: {
-    // selectedItem() {
-    //   this.reCenter();
-    // },
+    selectedItem() {
+      this.reCenter();
+    },
   },
 };
 </script>
