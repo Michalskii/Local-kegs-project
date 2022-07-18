@@ -80,7 +80,6 @@ export default {
       ]),
       dialog: false,
       center: [51, 0],
-      newCenter: [],
       url: "https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=1a6a86ca467f482da6e3432b72eb7bcc",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -143,11 +142,10 @@ export default {
     },
 
     showBrewery(item) {
-      let ltd = item.latitude;
+      let lat = item.latitude;
       let lng = item.longitude;
-      this.newCenter.push(ltd, lng);
-      this.center = this.newCenter;
-      this.newCenter = [];
+
+      this.center = [lat, lng];
       this.showInfo(item);
     },
     getCurrentLocation() {
@@ -183,19 +181,18 @@ export default {
     },
     centerUpdated(center) {
       this.center = center;
-      return center;
     },
 
     closeDialog() {
       this.dialog = false;
     },
 
-    reCenter() {
-      this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
-      this.center = this.newCenter;
-      this.newCenter = [];
-      this.zoom = 1;
-    },
+    // reCenter() {
+    //   this.newCenter.push(this.selectedBreweryLat, this.selectedBreweryLng);
+    //   this.center = this.newCenter;
+    //   this.newCenter = [];
+    //   this.zoom = 1;
+    // },
   },
   computed: {
     ...mapState("brewsStore", ["fetchedMapItems", "lastFetched"]),
