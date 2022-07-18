@@ -22,8 +22,8 @@ export default {
 		userFavs: [],
 	}),
 	actions: {
-		fetchUserFavs({ commit }) {
-			userFavs()
+		fetchUserFavs({ commit }, userId) {
+			userFavs(userId)
 				.then((response) => response.json())
 				.then((data) => commit('updateUserFavs', data));
 		},

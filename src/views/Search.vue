@@ -94,6 +94,7 @@ export default {
       this.item = item;
     },
     addToFavs(item) {
+      console.log(item);
       if (this.$auth.isAuthenticated) {
         this.addNewFav(item);
         this.patchFavList(this.userId);
