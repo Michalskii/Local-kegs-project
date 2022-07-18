@@ -14,6 +14,7 @@ function getParsedMapObjects(arr1, arr2) {
 			.values(),
 	];
 }
+
 export default {
 	namespaced: true,
 	state: () => ({
@@ -25,7 +26,7 @@ export default {
 		fetchUserFavs({ commit }, userId) {
 			userFavs(userId)
 				.then((response) => response.json())
-				.then((data) => commit('updateUserFavs', data));
+				.then((data) => commit('updateStore', data.user_metadata.favourites));
 		},
 
 		async fetchMapItems({ commit }, payload) {
@@ -42,13 +43,29 @@ export default {
 			return getFilteredMapItems(fetchedItems);
 		},
 
-		addNewFav({ commit }, brewery) {
-			commit('pushFav', brewery);
+		addNewFav({ commit, state }, brewery) {
+			console.log(state.userFavs);
+			if (!state.userFavs.some((e) => e.id === brewery.id)) {
+				console.log('brewery added');
+				let arr = state.userFavs;
+				arr.push(brewery);
+				commit('updateStore', arr);
+			}
 		},
 
-		deleteFavItem({ commit }, deletedItem) {
-			commit('delete', deletedItem);
+		deleteFavItem({ commit, state }, deletedItem) {
+			let data = state.userFavs.filter((brewery) => brewery.id !== deletedItem);
+			commit('updateStore', data);
 		},
+
+		// addNewFav({ commit}, brewery) {
+
+		// 	commit('pushFav', brewery);
+		// },
+
+		// deleteFavItem({ commit }, deletedItem) {
+		// 	commit('delete', deletedItem);
+		// },
 		patchFavList({ commit }, userId) {
 			commit('sendPatchRequest', userId);
 		},
@@ -62,22 +79,25 @@ export default {
 				state.lastFetched
 			);
 		},
-		pushFav(state, brewery) {
-			if (!state.userFavs.includes(brewery)) {
-				state.userFavs.push(brewery);
-			}
+		updateStore(state, data) {
+			state.userFavs = data;
 		},
+		// pushFav(state, brewery) {
+		// 	if (!state.userFavs.includes(brewery)) {
+		// 		state.userFavs.push(brewery);
+		// 	}
+		// },
 
-		updateUserFavs(state, data) {
-			state.userFavs = data.user_metadata.favourites;
-			console.log(data.user_metadata.favourites);
-			console.log(state.userFavs);
-		},
-		delete(state, deletedItem) {
-			state.userFavs = state.userFavs.filter(
-				(brewery) => brewery.id !== deletedItem
-			);
-		},
+		// updateUserFavs(state, data) {
+		// 	state.userFavs = data.user_metadata.favourites;
+		// 	console.log(data.user_metadata.favourites);
+		// 	console.log(state.userFavs);
+		// },
+		// delete(state, deletedItem) {
+		// 	state.userFavs = state.userFavs.filter(
+		// 		(brewery) => brewery.id !== deletedItem
+		// 	);
+		// },
 		async sendPatchRequest(state, userId) {
 			const api_url = `https://dev-cl8pjk73.eu.auth0.com/api/v2/users/auth0%7C${userId}`;
 			const response = await axios.patch(
