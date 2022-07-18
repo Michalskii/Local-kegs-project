@@ -19,7 +19,7 @@
 
       <v-data-table
         :headers="headers"
-        :items="searchResults"
+        :items="searched"
         dark
         @click:row="showInfo"
         :items-per-page="5"
@@ -71,7 +71,7 @@ export default {
   },
 
   computed: {
-    ...mapState("brewsStore", ["brews", "userFavs"]),
+    ...mapState("brewsStore", ["brews", "userFavs", "searched"]),
 
     userId() {
       return this.$auth.user.sub.slice(6);
@@ -79,14 +79,21 @@ export default {
   },
 
   methods: {
-    ...mapActions("brewsStore", ["fetchUserFavs", "addNewFav", "patchFavList"]),
+    ...mapActions("brewsStore", [
+      "fetchUserFavs",
+      "addNewFav",
+      "patchFavList",
+      "requestSearch",
+    ]),
 
     getResults() {
-      fetch(
-        `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
-      )
-        .then((response) => response.json())
-        .then((data) => (this.searchResults = data));
+      this.requestSearch(this.search);
+
+      // fetch(
+      //   `https://api.openbrewerydb.org/breweries/search?query=${this.search}`
+      // )
+      //   .then((response) => response.json())
+      //   .then((data) => (this.searchResults = data));
     },
 
     showInfo(item) {
