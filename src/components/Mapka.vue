@@ -28,7 +28,7 @@
           @click="showBrewery(brew)"
           :key="index"
           v-for="(brew, index) in fetchedMapItems"
-          :lat-lng="latLng(brew.latitude, brew.longitude)"
+          :lat-lng="getLatLng(brew.latitude, brew.longitude)"
         ></l-marker
       ></v-marker-cluster>
     </l-map>
@@ -92,12 +92,12 @@ export default {
   methods: {
     ...mapActions("brewsStore", ["fetchMapItems"]),
 
-    latLng(lat, lng) {
+    getLatLng(lat, lng) {
       return L.latLng(lat, lng);
     },
 
     getLatLngOfMarkers(array) {
-      return array.map((item) => this.latLng(item.latitude, item.longitude));
+      return array.map((item) => this.getLatLng(item.latitude, item.longitude));
     },
 
     async fetchNewMarkers() {

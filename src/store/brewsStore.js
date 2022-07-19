@@ -38,9 +38,6 @@ export default {
 			let lng = payload.b;
 			let page = payload.c;
 
-			// const fetchedItems = await fetch(
-			// 	`https://api.openbrewerydb.org/breweries?by_dist=${a},${b}&per_page=50&page=${c}`
-			// ).then((response) => response.json());
 			const fetchedItems = await fetchMap(lat, lng, page);
 
 			commit('pushFetchedMapItems', fetchedItems);
@@ -51,6 +48,16 @@ export default {
 			let items = await fetchSearched(searched);
 			commit('handleSearched', items);
 		},
+
+		// addNewFav({ commit, state }, brewery) {
+		// 	console.log(state.userFavs);
+		// 	if (!state.userFavs.some((e) => e.id === brewery.id)) {
+		// 		console.log('brewery added');
+		// 		let favs = state.userFavs;
+		// 		favs.push(brewery);
+		// 		commit('updateStore', favs);
+		// 	}
+		// },
 
 		addNewFav({ commit, state }, brewery) {
 			console.log(state.userFavs);
@@ -67,16 +74,7 @@ export default {
 			commit('updateStore', data);
 		},
 
-		// addNewFav({ commit}, brewery) {
-
-		// 	commit('pushFav', brewery);
-		// },
-
-		// deleteFavItem({ commit }, deletedItem) {
-		// 	commit('delete', deletedItem);
-		// },
 		patchFavList({ state }, userId) {
-			// commit('sendPatchRequest', userId);
 			patchUser(userId, state);
 		},
 	},
@@ -97,38 +95,23 @@ export default {
 		updateStore(state, data) {
 			state.userFavs = data;
 		},
-		// pushFav(state, brewery) {
-		// 	if (!state.userFavs.includes(brewery)) {
-		// 		state.userFavs.push(brewery);
-		// 	}
-		// },
 
-		// updateUserFavs(state, data) {
-		// 	state.userFavs = data.user_metadata.favourites;
-		// 	console.log(data.user_metadata.favourites);
-		// 	console.log(state.userFavs);
-		// },
-		// delete(state, deletedItem) {
-		// 	state.userFavs = state.userFavs.filter(
-		// 		(brewery) => brewery.id !== deletedItem
+		// async sendPatchRequest(state, userId) {
+		// 	const api_url = `https://dev-cl8pjk73.eu.auth0.com/api/v2/users/auth0%7C${userId}`;
+		// 	const response = await axios.patch(
+		// 		api_url,
+
+		// 		{
+		// 			user_metadata: {
+		// 				favourites: state.userFavs,
+		// 			},
+		// 		},
+		// 		{
+		// 			headers: {
+		// 				Authorization: `Bearer ${token}`,
+		// 			},
+		// 		}
 		// 	);
 		// },
-		async sendPatchRequest(state, userId) {
-			const api_url = `https://dev-cl8pjk73.eu.auth0.com/api/v2/users/auth0%7C${userId}`;
-			const response = await axios.patch(
-				api_url,
-
-				{
-					user_metadata: {
-						favourites: state.userFavs,
-					},
-				},
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-		},
 	},
 };

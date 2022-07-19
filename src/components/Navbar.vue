@@ -65,7 +65,7 @@ export default {
 <template>
   <div>
     <v-app-bar app clipped-left color="rgba(1, 1, 1, 0.75)">
-      <router-link to="home" class="links ml-16"
+      <router-link to="/" class="links ml-16"
         ><v-icon color="white" large>mdi-glass-mug</v-icon> Local
         kegs</router-link
       >
