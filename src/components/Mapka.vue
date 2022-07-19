@@ -6,6 +6,12 @@
       indeterminate
       color="white"
     ></v-progress-circular>
+    <v-progress-circular
+      class="markersLoader"
+      v-show="loadingMarkers"
+      indeterminate
+      color="blue"
+    ></v-progress-circular>
     <info-dialog
       v-if="dialog"
       @close="closeDialog"
@@ -70,6 +76,7 @@ export default {
       zoom: 1,
       markers: [],
       loading: true,
+      loadingMarkers: false,
       page: 1,
       lastFetchedMarkers: [],
       bounds: latLngBounds([
@@ -119,8 +126,12 @@ export default {
         setTimeout(() => {
           this.fetchNewMarkers();
         }, 10);
+        console.log("loading markers");
+        this.loadingMarkers = true;
       } else {
         this.page = 1;
+        console.log("markers loaded");
+        this.loadingMarkers = false;
       }
     },
 
@@ -240,5 +251,11 @@ export default {
   position: absolute;
   top: 40%;
   left: 46%;
+}
+.markersLoader {
+  position: absolute;
+  top: 40%;
+  left: 46%;
+  z-index: 10;
 }
 </style>
