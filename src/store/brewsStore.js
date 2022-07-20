@@ -49,16 +49,6 @@ export default {
 			commit('handleSearched', items);
 		},
 
-		// addNewFav({ commit, state }, brewery) {
-		// 	console.log(state.userFavs);
-		// 	if (!state.userFavs.some((e) => e.id === brewery.id)) {
-		// 		console.log('brewery added');
-		// 		let favs = state.userFavs;
-		// 		favs.push(brewery);
-		// 		commit('updateStore', favs);
-		// 	}
-		// },
-
 		addNewFav({ commit, state }, brewery) {
 			console.log(state.userFavs);
 			if (!state.userFavs.some((e) => e.id === brewery.id)) {
@@ -68,6 +58,21 @@ export default {
 				commit('updateStore', favs);
 			}
 		},
+
+		// addNewFav({ commit, state }, brewery) {
+		// 	console.log(state.userFavs);
+		// 	// if (!state.userFavs typeof Array)
+		// 	if (typeof state.userFavs !== 'array') {
+		// 		state.userFavs = [];
+		// 		console.log(typeof state.userFavs);
+		// 	}
+		// 	if (!state.userFavs.some((e) => e.id === brewery.id)) {
+		// 		console.log('brewery added');
+		// 		let favs = state.userFavs;
+		// 		favs.push(brewery);
+		// 		commit('updateStore', favs);
+		// 	}
+		// },
 
 		deleteFavItem({ commit, state }, deletedItem) {
 			let data = state.userFavs.filter((brewery) => brewery.id !== deletedItem);

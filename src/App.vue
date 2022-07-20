@@ -2,7 +2,7 @@
   <v-app class="mainBody">
     <FetchUserMetadata v-if="$auth.isAuthenticated" />
 
-    <navbar />
+    <navbar pageTitle="Local kegs" />
     <v-main class="pl-2">
       <router-view />
     </v-main>
